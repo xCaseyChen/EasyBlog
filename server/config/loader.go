@@ -1,45 +1,72 @@
 package config
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/spf13/viper"
 )
 
 func init() {
 	viper.AutomaticEnv()
-}
-
-func (c *Configs) LoadConfig() {
-	c.ServerCfg.loadConfig()
-	c.PgCfg.loadConfig()
-}
-
-func (s *ServerConfig) loadConfig() {
-	viper.AddConfigPath("./")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
+	viper.AddConfigPath("./")
+}
 
+func (c *Config) LoadConfig() error {
+	if err := c.PgCfg.loadConfig(); err != nil {
+		return err
+	}
+	if err := c.ServerCfg.loadConfig(); err != nil {
+		return err
+	}
+	if err := c.PgConnCfg.loadConfig(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *PgConfig) loadConfig() error {
+	missing := []string{}
+	require := []string{
+		"POSTGRES_HOST",
+		"POSTGRES_PORT",
+		"POSTGRES_USER",
+		"POSTGRES_PASSWORD",
+		"POSTGRES_DB",
+	}
+	for _, env := range require {
+		if !viper.IsSet(env) {
+			missing = append(missing, env)
+		}
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("required environment not found %v", missing)
+	}
+	p.Host = viper.GetString("POSTGRES_HOST")
+	p.Port = viper.GetString("POSTGRES_PORT")
+	p.User = viper.GetString("POSTGRES_USER")
+	p.Password = viper.GetString("POSTGRES_PASSWORD")
+	p.Database = viper.GetString("POSTGRES_DB")
+	return nil
+}
+
+func (s *ServerConfig) loadConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Failed to load server.yaml: %v", err)
+		return fmt.Errorf("failed to load config.yaml: %w", err)
 	}
-	if err := viper.Unmarshal(s); err != nil {
-		log.Fatalf("Failed to unmarshal server config: %v", err)
+	if err := viper.UnmarshalKey("server", s); err != nil {
+		return fmt.Errorf("failed to unmarshal server config: %w", err)
 	}
+	return nil
 }
 
-func (p *PgConfig) loadConfig() {
-	p.Host = getEnvStringOrFatal("POSTGRES_HOST")
-	p.Port = getEnvStringOrFatal("POSTGRES_PORT")
-	p.User = getEnvStringOrFatal("POSTGRES_USER")
-	p.Password = getEnvStringOrFatal("POSTGRES_PASSWORD")
-	p.Database = getEnvStringOrFatal("POSTGRES_DB")
-}
-
-func getEnvStringOrFatal(env string) string {
-	if !viper.IsSet(env) {
-		log.Fatalf("Environment %s not found", env)
+func (p *PgConnConfig) loadConfig() error {
+	if err := viper.ReadInConfig(); err != nil {
+		return fmt.Errorf("failed to load config.yaml: %w", err)
 	}
-	val := viper.GetString(env)
-	return val
+	if err := viper.UnmarshalKey("pg_conn", p); err != nil {
+		return fmt.Errorf("failed to unmarshal postgres connection config: %w", err)
+	}
+	return nil
 }
