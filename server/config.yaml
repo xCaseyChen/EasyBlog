@@ -1,1 +1,10 @@
-port: 8080 # WARNING: Do not modify this line
+server:
+  port: 8080 # WARNING: Do not modify this line
+
+pg_conn:
+  conn_max_retries: 10
+  conn_retry_interval: 3s
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 1h
+  conn_max_idletime: 30m
