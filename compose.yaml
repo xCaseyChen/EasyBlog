@@ -12,6 +12,10 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      retries: ${POSTGRES_HEALTHCHECK_RETRIES}
+      interval: ${POSTGRES_HEALTHCHECK_INTERVAL}
 
   pgadmin:
     image: dpage/pgadmin4
@@ -28,13 +32,15 @@ services:
   server:
     build: ./server
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+        restart: true
     environment:
-      - POSTGRES_HOST: postgres
-      - POSTGRES_PORT: ${POSTGRES_PORT}
-      - POSTGRES_USER: ${POSTGRES_USER}
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      - POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "${SERVER_PORT}:8080"
 
