@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// load environment and config file
 func init() {
 	viper.AutomaticEnv()
 	viper.SetConfigName("config")
@@ -13,6 +14,7 @@ func init() {
 	viper.AddConfigPath("./")
 }
 
+// load config
 func (c *Config) LoadConfig() error {
 	if err := c.PgCfg.loadConfig(); err != nil {
 		return err
@@ -26,6 +28,7 @@ func (c *Config) LoadConfig() error {
 	return nil
 }
 
+// load postgres config from environment
 func (p *PgConfig) loadConfig() error {
 	missing := []string{}
 	require := []string{
@@ -51,6 +54,7 @@ func (p *PgConfig) loadConfig() error {
 	return nil
 }
 
+// load server config from file
 func (s *ServerConfig) loadConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("failed to load config.yaml: %w", err)
@@ -61,6 +65,7 @@ func (s *ServerConfig) loadConfig() error {
 	return nil
 }
 
+// load postgres connection config from file
 func (p *PgConnConfig) loadConfig() error {
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("failed to load config.yaml: %w", err)

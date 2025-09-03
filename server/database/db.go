@@ -12,6 +12,7 @@ import (
 	"easyblog/config"
 )
 
+// connect to database by config
 func ConnectDB(cfg *config.Config) (*gorm.DB, error) {
 	db, err := openDB(cfg)
 	if err != nil {
@@ -24,6 +25,7 @@ func ConnectDB(cfg *config.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
+// close database
 func CloseDB(db *gorm.DB) error {
 	if db == nil {
 		return errors.New("db pointer is nil")
@@ -39,6 +41,7 @@ func CloseDB(db *gorm.DB) error {
 	return nil
 }
 
+// open database connection
 func openDB(cfg *config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=%s",
@@ -72,6 +75,7 @@ func openDB(cfg *config.Config) (*gorm.DB, error) {
 	return db, nil
 }
 
+// setup database connection pool
 func configureDB(db *gorm.DB, pgConnCfg *config.PgConnConfig) error {
 	if db == nil {
 		return errors.New("db pointer is nil")
