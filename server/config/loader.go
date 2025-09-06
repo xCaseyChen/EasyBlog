@@ -14,6 +14,11 @@ func init() {
 	viper.AddConfigPath("./")
 }
 
+// new config
+func New() *Config {
+	return &Config{}
+}
+
 // load config
 func (c *Config) LoadConfig() error {
 	if err := c.PgCfg.loadConfig(); err != nil {
