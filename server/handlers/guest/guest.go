@@ -6,14 +6,15 @@ import (
 
 // <URL, Handle> map, method is fixed to "GET"
 var guestHandlers = map[string]httprouter.Handle{
-	"/":           homeHandler,       // home page
-	"/home":       homeHandler,       // home page
-	"/posts":      postsHandler,      // posts page
-	"/categories": categoriesHandler, // categories page
-	"/tags":       tagsHandler,       // tags page
-	"/about":      aboutHandler,      // about page
-	"/post/:id":   postDetailHandler, // post detail page
-	"/api/posts":  postQueryHandler,  // query posts api
+	"/":             homeHandler,          // home page
+	"/home":         homeHandler,          // home page
+	"/posts":        postsHandler,         // posts page
+	"/categories":   categoriesHandler,    // categories page
+	"/tags":         tagsHandler,          // tags page
+	"/about":        aboutHandler,         // about page
+	"/post/:id":     postDetailHandler,    // post detail page
+	"/api/posts":    postsQueryHandler,    // query posts api
+	"/api/comments": commentsQueryHandler, // query comments api
 }
 
 // Add guest handlers to router
