@@ -31,6 +31,8 @@ services:
   
   server:
     build: ./server
+    container_name: blog-server
+    restart: always
     depends_on:
       postgres:
         condition: service_healthy
