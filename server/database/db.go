@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -18,8 +19,8 @@ func ConnectDB(cfg *config.Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = configureDB(db, &cfg.PgConnCfg)
-	if err != nil {
+	if err = configureDB(db, &cfg.PgConnCfg); err != nil {
+		CloseDB(db)
 		return nil, err
 	}
 	return db, nil
@@ -34,11 +35,19 @@ func CloseDB(db *gorm.DB) error {
 	if err != nil {
 		return fmt.Errorf("failed to fetch sql.DB: %w", err)
 	}
-	err = sqlDb.Close()
-	if err != nil {
+	if err = sqlDb.Close(); err != nil {
 		return fmt.Errorf("failed to close sql.DB: %w", err)
 	}
 	return nil
+}
+
+// init database schema
+func InitSchema(db *gorm.DB, path string) error {
+	sqlBytes, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("failed to read %s: %w", path, err)
+	}
+	return db.Exec(string(sqlBytes)).Error
 }
 
 // open database connection
