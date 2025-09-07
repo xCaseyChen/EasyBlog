@@ -5,8 +5,11 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"gorm.io/gorm"
 )
 
-func categoriesHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Categories page\n")
+func categoriesHandler(db *gorm.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		fmt.Fprint(w, "Categories page\n")
+	}
 }

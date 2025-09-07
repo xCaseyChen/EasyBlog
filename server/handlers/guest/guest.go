@@ -2,10 +2,11 @@ package guest
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"gorm.io/gorm"
 )
 
 // <URL, Handle> map, method is fixed to "GET"
-var guestHandlers = map[string]httprouter.Handle{
+var guestHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/":             homeHandler,          // home page
 	"/home":         homeHandler,          // home page
 	"/posts":        postsHandler,         // posts page
@@ -18,8 +19,8 @@ var guestHandlers = map[string]httprouter.Handle{
 }
 
 // Add guest handlers to router
-func Routes(r *httprouter.Router) {
+func Routes(r *httprouter.Router, db *gorm.DB) {
 	for path, handler := range guestHandlers {
-		r.GET(path, handler)
+		r.GET(path, handler(db))
 	}
 }
