@@ -6,7 +6,7 @@ import (
 )
 
 // <URL, Handle> map, method is fixed to "GET"
-var guestHandlers = map[string]func(*gorm.DB) httprouter.Handle{
+var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/init":         initHandler,          // init page
 	"/":             homeHandler,          // home page
 	"/home":         homeHandler,          // home page
@@ -19,9 +19,16 @@ var guestHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/api/comments": commentsQueryHandler, // query comments api
 }
 
+var guestPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{
+	"/api/init/password": initPasswordHandler, // init admin password api
+}
+
 // Add guest handlers to router
 func Routes(r *httprouter.Router, db *gorm.DB) {
-	for path, handler := range guestHandlers {
+	for path, handler := range guestGetHandlers {
 		r.GET(path, handler(db))
+	}
+	for path, handler := range guestPostHandlers {
+		r.POST(path, handler(db))
 	}
 }
