@@ -5,12 +5,12 @@ import (
 )
 
 type PostBrief struct {
-	ID        uint
-	Title     string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Category  string
-	Tags      []string
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Category  string    `json:"category"`
+	Tags      []string  `json:"tags"`
 }
 
 type PostDetail struct {
@@ -19,10 +19,10 @@ type PostDetail struct {
 }
 
 type Comment struct {
-	ID        uint
-	PostID    uint
-	CreatedAt time.Time
-	Content   string
+	ID        uint      `json:"id"`
+	PostID    uint      `json:"post_id"`
+	CreatedAt time.Time `json:"created_at"`
+	Content   string    `json:"content"`
 }
 
 type LocalUser struct {

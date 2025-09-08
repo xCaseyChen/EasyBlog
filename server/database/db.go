@@ -63,7 +63,9 @@ func openDB(cfg *config.Config) (*gorm.DB, error) {
 		cfg.PgCfg.Database,
 		"UTC",
 	)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		TranslateError: true, // translate database errors
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to open postgres: %w", err)
 	}
