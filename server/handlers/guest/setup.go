@@ -12,11 +12,11 @@ import (
 	"easyblog/database"
 )
 
-func initHandler(db *gorm.DB) httprouter.Handle {
+func setupHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").First(r.Context()); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				fmt.Fprint(w, "Init page\n")
+				fmt.Fprint(w, "Setup page\n")
 			} else {
 				log.Printf("Database error: %v", err)
 				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)

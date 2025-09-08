@@ -27,7 +27,7 @@ func commentsQueryHandler(db *gorm.DB) httprouter.Handle {
 	}
 }
 
-func initPasswordHandler(db *gorm.DB) httprouter.Handle {
+func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		// json request and response
 		type jsonResponse struct {
@@ -73,8 +73,8 @@ func initPasswordHandler(db *gorm.DB) httprouter.Handle {
 			}
 		} else {
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(jsonResponse{true, "admin password initialized"})
-			log.Printf("Admin password initialized")
+			json.NewEncoder(w).Encode(jsonResponse{true, "admin password set up"})
+			log.Printf("Admin password set up")
 		}
 	}
 }
