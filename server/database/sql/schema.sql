@@ -1,6 +1,6 @@
 BEGIN;
 
-CREATE TABLE IF NOT EXISTS posts_brief (
+CREATE TABLE IF NOT EXISTS post_briefs (
     id          SERIAL PRIMARY KEY,
     title       TEXT NOT NULL,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS posts_brief (
     tags        TEXT[]
 );
 
-CREATE TABLE IF NOT EXISTS posts_detail (
-    id          INTEGER REFERENCES posts_brief(id) ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS post_details (
+    id          INTEGER REFERENCES post_briefs(id) ON DELETE CASCADE,
     content     TEXT
 );
 
 CREATE TABLE IF NOT EXISTS comments (
     id          SERIAL PRIMARY KEY,
-    post_id     INTEGER REFERENCES posts_brief(id) ON DELETE CASCADE,
+    post_id     INTEGER REFERENCES post_briefs(id) ON DELETE CASCADE,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     content     TEXT NOT NULL
 );

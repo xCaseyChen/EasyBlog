@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -47,7 +48,8 @@ func InitSchema(db *gorm.DB, path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to read %s: %w", path, err)
 	}
-	return db.Exec(string(sqlBytes)).Error
+	result := gorm.WithResult()
+	return gorm.G[any](db, result).Exec(context.Background(), string(sqlBytes))
 }
 
 // open database connection
