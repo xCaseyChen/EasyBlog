@@ -4,6 +4,7 @@ go 1.25.0
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0
+	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.20.1
 	golang.org/x/crypto v0.32.0
 	gorm.io/driver/postgres v1.6.0
