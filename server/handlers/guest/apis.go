@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
@@ -30,11 +31,38 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		// check category
 		if len(category) > 1 {
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(jsonResponse{false, "to many categories", nil})
+			_ = json.NewEncoder(w).Encode(jsonResponse{
+				Success:    false,
+				Message:    "too many categories",
+				PostBriefs: nil,
+			})
 			return
 		}
 		// use tags and category search in database
-		log.Panicln(tags)
+		var post_briefs []database.PostBrief
+		var query gorm.ChainInterface[database.PostBrief] = gorm.G[database.PostBrief](db)
+		if len(tags) > 0 {
+			query = query.Where("tags @> ?", pq.Array(tags))
+		}
+		if len(category) == 1 {
+			query = query.Where("category = ?", category[0])
+		}
+		post_briefs, err := query.Find(r.Context())
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			_ = json.NewEncoder(w).Encode(jsonResponse{
+				Success:    false,
+				Message:    "internal server error",
+				PostBriefs: nil,
+			})
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(jsonResponse{
+			Success:    true,
+			Message:    "find post briefs",
+			PostBriefs: post_briefs,
+		})
 	}
 }
 
@@ -61,7 +89,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 		var jsonReq jsonRequest
 		if err := json.NewDecoder(r.Body).Decode(&jsonReq); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(jsonResponse{
+			_ = json.NewEncoder(w).Encode(jsonResponse{
 				Success: false,
 				Message: "invalid request",
 			})
@@ -73,7 +101,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 		hash, err := bcrypt.GenerateFromPassword([]byte(jsonReq.Password), bcrypt.DefaultCost)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(jsonResponse{
+			_ = json.NewEncoder(w).Encode(jsonResponse{
 				Success: false,
 				Message: "internal server error",
 			})
@@ -89,7 +117,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 		if err != nil {
 			if errors.Is(err, gorm.ErrDuplicatedKey) {
 				w.WriteHeader(http.StatusForbidden)
-				json.NewEncoder(w).Encode(jsonResponse{
+				_ = json.NewEncoder(w).Encode(jsonResponse{
 					Success: false,
 					Message: "admin already exists",
 				})
@@ -97,7 +125,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 				return
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
-				json.NewEncoder(w).Encode(jsonResponse{
+				_ = json.NewEncoder(w).Encode(jsonResponse{
 					Success: false,
 					Message: "internal server error",
 				})
@@ -106,7 +134,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 			}
 		} else {
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(jsonResponse{
+			_ = json.NewEncoder(w).Encode(jsonResponse{
 				Success: true,
 				Message: "admin password set up",
 			})
