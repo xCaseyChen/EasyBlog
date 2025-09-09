@@ -19,16 +19,16 @@ func setupHandler(db *gorm.DB) httprouter.Handle {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				htmlBytes, err := os.ReadFile("templates/setup/index.html")
 				if err != nil {
-					log.Printf("Template setup read error: %v", err)
 					http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
+					log.Printf("Template setup read error: %v", err)
 					return
 				} else {
 					fmt.Fprint(w, string(htmlBytes))
 					return
 				}
 			} else {
-				log.Printf("Database error: %v", err)
 				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
+				log.Printf("Database error: %v", err)
 				return
 			}
 		} else {

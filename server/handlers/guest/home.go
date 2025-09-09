@@ -18,8 +18,8 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				http.Redirect(w, r, "/setup", http.StatusFound)
 			} else {
-				log.Printf("Database error: %v", err)
 				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
+				log.Printf("Database error: %v", err)
 			}
 		} else {
 			fmt.Fprint(w, "Home page\n")

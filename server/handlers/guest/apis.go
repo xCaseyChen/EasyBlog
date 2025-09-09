@@ -47,6 +47,7 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 			log.Printf("Failed to parse http.Request.Body: %v", err)
 			return
 		}
+		// TODO: validate password, uppper case & lower case & number & len > 8
 		// hash password
 		hash, err := bcrypt.GenerateFromPassword([]byte(jsonReq.Password), bcrypt.DefaultCost)
 		if err != nil {
@@ -66,15 +67,18 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 				w.WriteHeader(http.StatusForbidden)
 				json.NewEncoder(w).Encode(jsonResponse{false, "admin already exists"})
 				log.Printf("Admin already exists: %v", err)
+				return
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 				json.NewEncoder(w).Encode(jsonResponse{false, "internal server error"})
 				log.Printf("Database error: %v", err)
+				return
 			}
 		} else {
 			w.WriteHeader(http.StatusCreated)
 			json.NewEncoder(w).Encode(jsonResponse{true, "admin password set up"})
 			log.Printf("Admin password set up")
+			return
 		}
 	}
 }
