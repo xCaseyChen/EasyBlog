@@ -17,7 +17,7 @@ BODY
 
 ```javascript
 Rquest:
-GET /api/posts?tags=xxx,yyy&category=zzz
+GET /api/posts?tags=xxx,yyy&category=zzz&before_id=iii&limit=jjj
 BODY {}
 
 Response:
@@ -35,6 +35,7 @@ BODY
             "category": "zzz",
             "tags": ["xxx", "yyy"]
         }
-    ]
+    ],
+    "next_before_id": 20
 }
 ```
