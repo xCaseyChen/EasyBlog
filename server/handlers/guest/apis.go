@@ -135,7 +135,15 @@ func setupPasswordHandler(db *gorm.DB) httprouter.Handle {
 			log.Printf("Failed to parse http.Request.Body: %v", err)
 			return
 		}
-		// TODO: validate password, uppper case & lower case & number & len > 8
+		// validate password compliance
+		if !utils.ValidatePasswordCompliance(jsonReq.Password) {
+			w.WriteHeader(http.StatusBadRequest)
+			_ = json.NewEncoder(w).Encode(jsonResponse{
+				Success: false,
+				Message: "incompliance password",
+			})
+			return
+		}
 		// hash password
 		hash, err := bcrypt.GenerateFromPassword([]byte(jsonReq.Password), bcrypt.DefaultCost)
 		if err != nil {
