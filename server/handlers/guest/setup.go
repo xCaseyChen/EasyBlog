@@ -15,6 +15,7 @@ import (
 
 func setupHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").First(r.Context()); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				htmlBytes, err := os.ReadFile("templates/setup/index.html")
@@ -31,9 +32,7 @@ func setupHandler(db *gorm.DB) httprouter.Handle {
 				log.Printf("Database error: %v", err)
 				return
 			}
-		} else {
-			http.Redirect(w, r, "/home", http.StatusFound)
-			return
 		}
+		http.Redirect(w, r, "/home", http.StatusFound)
 	}
 }
