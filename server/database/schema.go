@@ -2,15 +2,17 @@ package database
 
 import (
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type PostBrief struct {
-	ID        uint      `json:"id"`
-	Title     string    `json:"title"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Category  string    `json:"category"`
-	Tags      []string  `json:"tags"`
+	ID        uint           `json:"id"`
+	Title     string         `json:"title"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	Category  string         `json:"category"`
+	Tags      pq.StringArray `gorm:"type:text[]" json:"tags"`
 }
 
 type PostDetail struct {
