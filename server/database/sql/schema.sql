@@ -3,6 +3,7 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS post_briefs (
     id          SERIAL PRIMARY KEY,
     title       TEXT NOT NULL,
+    slug        TEXT UNIQUE,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     category    TEXT,
