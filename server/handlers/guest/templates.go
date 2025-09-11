@@ -12,13 +12,13 @@ var guestTemplates = map[string]string{
 }
 
 // root template for html
-var Template *template.Template
+var tmpl *template.Template
 
 // init(): templates
 func init() {
-	Template = template.New("root")
+	tmpl = template.New("root")
 	for name, path := range guestTemplates {
-		_, err := Template.New(name).ParseFiles(path)
+		_, err := tmpl.New(name).ParseFiles(path)
 		if err != nil {
 			log.Fatalf("Failed to parse template %s: %v", path, err)
 		}

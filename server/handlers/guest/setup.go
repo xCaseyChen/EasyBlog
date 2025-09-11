@@ -20,7 +20,7 @@ func setupHandler(db *gorm.DB) httprouter.Handle {
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").First(r.Context()); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				var htmlString strings.Builder
-				err = Template.ExecuteTemplate(&htmlString, setupTemplateName, nil)
+				err = tmpl.ExecuteTemplate(&htmlString, setupTemplateName, nil)
 				if err != nil {
 					http.Error(w, "internal server error page\n", http.StatusInternalServerError)
 					log.Printf("Failed to execute template %s: %v", setupTemplateName, err)

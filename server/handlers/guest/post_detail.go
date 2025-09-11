@@ -80,7 +80,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 			HtmlContent: template.HTML(htmlContent.String()),
 		}
 		var htmlString strings.Builder
-		err = Template.ExecuteTemplate(&htmlString, postDetailTemplateName, post)
+		err = tmpl.ExecuteTemplate(&htmlString, postDetailTemplateName, post)
 		if err != nil {
 			http.Error(w, "internal server error page\n", http.StatusInternalServerError)
 			log.Printf("Failed to execute template %s: %v", postDetailTemplateName, err)
