@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
 	"gorm.io/gorm"
@@ -14,19 +14,20 @@ import (
 )
 
 func setupHandler(db *gorm.DB) httprouter.Handle {
+	setupTemplateName := "setup"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").First(r.Context()); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				htmlBytes, err := os.ReadFile("templates/setup/index.html")
+				var htmlString strings.Builder
+				err = Template.ExecuteTemplate(&htmlString, setupTemplateName, nil)
 				if err != nil {
-					http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
-					log.Printf("Template setup read error: %v", err)
-					return
-				} else {
-					fmt.Fprint(w, string(htmlBytes))
+					http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+					log.Printf("Failed to execute template %s: %v", setupTemplateName, err)
 					return
 				}
+				fmt.Fprint(w, htmlString.String())
+				return
 			} else {
 				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
 				log.Printf("Database error: %v", err)
