@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// <URL, Handle> map, method is fixed to "GET"
+// <URL, Handle> maps
 var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/setup":        setupHandler,         // setup page
 	"/":             homeHandler,          // home page
