@@ -3,6 +3,7 @@ package guest
 import (
 	"bytes"
 	"easyblog/database"
+	"easyblog/handlers/common"
 	"errors"
 	"fmt"
 	"log"
@@ -37,10 +38,10 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		postBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", slug).First(r.Context())
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				http.Error(w, "page not found\n", http.StatusNotFound)
+				common.RenderInfoPage(w, http.StatusNotFound, "page not found")
 				return
 			} else {
-				http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 				log.Printf("Database error: %v", err)
 				return
 			}
@@ -48,7 +49,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		// get post_detail by id
 		postDetail, err := gorm.G[database.PostDetail](db).Where("id = ?", postBrief.ID).First(r.Context())
 		if err != nil {
-			http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)
 			return
 		}
@@ -65,7 +66,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 			),
 		)
 		if err := highlightGoldmark.Convert([]byte(postDetail.Content), &htmlContent); err != nil {
-			http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed to convert markdown to html: %v", err)
 			return
 		}
@@ -82,7 +83,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		var htmlString strings.Builder
 		err = tmpl.ExecuteTemplate(&htmlString, postDetailTemplateName, post)
 		if err != nil {
-			http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed to execute template %s: %v", postDetailTemplateName, err)
 			return
 		}

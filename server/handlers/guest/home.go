@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	"easyblog/database"
+	"easyblog/handlers/common"
 )
 
 func homeHandler(db *gorm.DB) httprouter.Handle {
@@ -18,7 +19,7 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				http.Redirect(w, r, "/setup", http.StatusFound)
 			} else {
-				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
+				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 				log.Printf("Database error: %v", err)
 			}
 		} else {

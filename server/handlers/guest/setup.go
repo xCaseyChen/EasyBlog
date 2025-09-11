@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 
 	"easyblog/database"
+	"easyblog/handlers/common"
 )
 
 func setupHandler(db *gorm.DB) httprouter.Handle {
@@ -22,14 +23,14 @@ func setupHandler(db *gorm.DB) httprouter.Handle {
 				var htmlString strings.Builder
 				err = tmpl.ExecuteTemplate(&htmlString, setupTemplateName, nil)
 				if err != nil {
-					http.Error(w, "internal server error page\n", http.StatusInternalServerError)
+					common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 					log.Printf("Failed to execute template %s: %v", setupTemplateName, err)
 					return
 				}
 				fmt.Fprint(w, htmlString.String())
 				return
 			} else {
-				http.Error(w, "Internal server error page\n", http.StatusInternalServerError)
+				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 				log.Printf("Database error: %v", err)
 				return
 			}
