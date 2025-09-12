@@ -14,6 +14,11 @@ func RenderInfoPage(w http.ResponseWriter, code int, message string) {
 		Title   string
 		Message string
 	}
+	/*
+		1. "internal server error"
+		2. "page not found"
+		3. "method not allowed"
+	*/
 
 	info := Info{
 		Code:    code,
