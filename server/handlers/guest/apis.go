@@ -18,7 +18,7 @@ import (
 )
 
 func postsQueryHandler(db *gorm.DB) httprouter.Handle {
-	limitMax := 100
+	limitMax := 20
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json") // response type: json
 		// json response
@@ -48,7 +48,7 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		query := gorm.G[database.PostBrief](db).Order("id desc")
 		if len(limit) == 1 {
 			limitInt, err := strconv.Atoi(limit[0])
-			if err != nil || limitInt <= 0 || limitInt >= limitMax {
+			if err != nil || limitInt <= 0 || limitInt > limitMax {
 				w.WriteHeader(http.StatusBadRequest)
 				_ = json.NewEncoder(w).Encode(jsonResponse{
 					Success:      false,
@@ -59,6 +59,8 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 				return
 			}
 			query = query.Limit(limitInt)
+		} else {
+			query = query.Limit(limitMax)
 		}
 		if len(beforeId) == 1 {
 			beforeIdInt, err := strconv.Atoi(beforeId[0])
