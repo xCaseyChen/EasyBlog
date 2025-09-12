@@ -7,16 +7,16 @@ import (
 
 // <URL, Handle> maps
 var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
-	"/setup":        setupHandler,         // setup page
-	"/":             homeHandler,          // home page
-	"/home":         homeHandler,          // home page
-	"/posts":        postsHandler,         // posts page
-	"/categories":   categoriesHandler,    // categories page
-	"/tags":         tagsHandler,          // tags page
-	"/about":        aboutHandler,         // about page
-	"/post/:slug":   postDetailHandler,    // post detail page by slug
-	"/api/posts":    postsQueryHandler,    // query posts api
-	"/api/comments": commentsQueryHandler, // query comments api
+	"/setup":              setupHandler,         // setup page
+	"/":                   homeHandler,          // home page
+	"/home":               homeHandler,          // home page
+	"/posts":              postsHandler,         // posts page
+	"/categories":         categoriesHandler,    // categories page
+	"/tags":               tagsHandler,          // tags page
+	"/about":              aboutHandler,         // about page
+	"/post/:slug":         postDetailHandler,    // post detail page by slug
+	"/api/guest/posts":    postsQueryHandler,    // query posts api
+	"/api/guest/comments": commentsQueryHandler, // query comments api
 }
 
 var guestPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{
