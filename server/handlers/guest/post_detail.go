@@ -25,7 +25,6 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		type Post struct {
-			ID          uint
 			Title       string
 			CreatedAt   time.Time
 			UpdatedAt   time.Time
@@ -72,7 +71,6 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		}
 		// replace template
 		post := Post{
-			ID:          postBrief.ID,
 			Title:       postBrief.Title,
 			CreatedAt:   postBrief.CreatedAt,
 			UpdatedAt:   postBrief.UpdatedAt,
