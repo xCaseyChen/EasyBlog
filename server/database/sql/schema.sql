@@ -15,6 +15,15 @@ CREATE TABLE IF NOT EXISTS post_details (
     content     TEXT
 );
 
+WITH ins AS (
+    INSERT INTO post_briefs (title, slug)
+    VALUES ('Home', 'home'), ('About', 'about')
+    ON CONFLICT (slug) DO NOTHING
+    RETURNING id
+)
+INSERT INTO post_details (id, content)
+SELECT id, '' FROM ins;
+
 CREATE TABLE IF NOT EXISTS comments (
     id          SERIAL PRIMARY KEY,
     post_id     INTEGER REFERENCES post_briefs(id) ON DELETE CASCADE,
