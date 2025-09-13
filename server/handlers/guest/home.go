@@ -29,7 +29,7 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 			}
 			return
 		}
-		type Home struct {
+		type HomePage struct {
 			HtmlContent template.HTML
 		}
 		homeBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", "home").First(r.Context())
@@ -50,11 +50,11 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 			log.Printf("Failed to convert markdown to html: %v", err)
 			return
 		}
-		home := Home{
+		homePage := HomePage{
 			HtmlContent: template.HTML(htmlContent),
 		}
 		var htmlString strings.Builder
-		if err = tmpl.ExecuteTemplate(&htmlString, homeTemplateName, home); err != nil {
+		if err = tmpl.ExecuteTemplate(&htmlString, homeTemplateName, homePage); err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed to execute template %s: %v", homeTemplateName, err)
 			return

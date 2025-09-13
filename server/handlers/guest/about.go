@@ -18,7 +18,7 @@ func aboutHandler(db *gorm.DB) httprouter.Handle {
 	aboutTemplateName := "about"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		type About struct {
+		type AboutPage struct {
 			HtmlContent template.HTML
 		}
 		aboutBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", "about").First(r.Context())
@@ -39,11 +39,11 @@ func aboutHandler(db *gorm.DB) httprouter.Handle {
 			log.Printf("Failed to convert markdown to html: %v", err)
 			return
 		}
-		about := About{
+		aboutPage := AboutPage{
 			HtmlContent: template.HTML(htmlContent),
 		}
 		var htmlString strings.Builder
-		if err = tmpl.ExecuteTemplate(&htmlString, aboutTemplateName, about); err != nil {
+		if err = tmpl.ExecuteTemplate(&htmlString, aboutTemplateName, aboutPage); err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed execute template %s: %v", aboutTemplateName, err)
 			return
