@@ -10,6 +10,7 @@ var guestTemplates = map[string]string{
 	"setup": "templates/setup/index.html",
 	"post":  "templates/post/index.html",
 	"home":  "templates/home/index.html",
+	"about": "templates/about/index.html",
 }
 
 // root template for html
