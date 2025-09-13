@@ -1,9 +1,9 @@
 package guest
 
 import (
-	"bytes"
 	"easyblog/database"
 	"easyblog/handlers/common"
+	"easyblog/utils"
 	"errors"
 	"fmt"
 	"log"
@@ -13,10 +13,7 @@ import (
 
 	"html/template"
 
-	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/julienschmidt/httprouter"
-	"github.com/yuin/goldmark"
-	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"gorm.io/gorm"
 )
 
@@ -53,18 +50,8 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 			return
 		}
 		// markdown to html
-		var htmlContent bytes.Buffer
-		highlightGoldmark := goldmark.New(
-			goldmark.WithExtensions(
-				highlighting.NewHighlighting(
-					highlighting.WithStyle("monokai"),
-					highlighting.WithFormatOptions(
-						chromahtml.WithLineNumbers(true),
-					),
-				),
-			),
-		)
-		if err := highlightGoldmark.Convert([]byte(postDetail.Content), &htmlContent); err != nil {
+		var htmlContent string
+		if htmlContent, err = utils.MarkdownToHTML(postDetail.Content); err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed to convert markdown to html: %v", err)
 			return
@@ -76,7 +63,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 			UpdatedAt:   postBrief.UpdatedAt.UTC().Format(time.RFC3339),
 			Category:    postBrief.Category,
 			Tags:        postBrief.Tags,
-			HtmlContent: template.HTML(htmlContent.String()),
+			HtmlContent: template.HTML(htmlContent),
 		}
 		var htmlString strings.Builder
 		err = tmpl.ExecuteTemplate(&htmlString, postDetailTemplateName, post)
