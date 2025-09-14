@@ -1,4 +1,4 @@
-package guest
+package common
 
 import (
 	"errors"
@@ -11,7 +11,6 @@ import (
 	"gorm.io/gorm"
 
 	"easyblog/database"
-	"easyblog/handlers/common"
 )
 
 func setupHandler(db *gorm.DB) httprouter.Handle {
@@ -23,14 +22,14 @@ func setupHandler(db *gorm.DB) httprouter.Handle {
 				var htmlString strings.Builder
 				err = tmpl[setupTemplateName].Execute(&htmlString, nil)
 				if err != nil {
-					common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
+					RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 					log.Printf("Failed to execute template %s: %v", setupTemplateName, err)
 					return
 				}
 				fmt.Fprint(w, htmlString.String())
 				return
 			} else {
-				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
+				RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 				log.Printf("Database error: %v", err)
 				return
 			}

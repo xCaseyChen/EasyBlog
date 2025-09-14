@@ -27,7 +27,7 @@ func RenderInfoPage(w http.ResponseWriter, code int, message string) {
 		Message: message,
 	}
 	var htmlString strings.Builder
-	err := tmpl.ExecuteTemplate(&htmlString, infoTemplateName, info)
+	err := tmpl[infoTemplateName].Execute(&htmlString, info)
 	if err != nil {
 		http.Error(w, message, code)
 		log.Printf("Failed to execute template %s: %v", infoTemplateName, err)

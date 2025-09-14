@@ -7,7 +7,6 @@ import (
 
 // <URL, Handle> maps
 var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
-	"/setup":              setupHandler,         // setup page
 	"/":                   homeHandler,          // home page
 	"/home":               homeHandler,          // home page
 	"/list":               postsHandler,         // posts page
@@ -19,9 +18,7 @@ var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/api/guest/comments": commentsQueryHandler, // query comments api
 }
 
-var guestPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{
-	"/api/setup/password": setupPasswordHandler, // setup admin password api
-}
+var guestPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{}
 
 // Add guest handlers to router
 func Routes(r *httprouter.Router, db *gorm.DB) {

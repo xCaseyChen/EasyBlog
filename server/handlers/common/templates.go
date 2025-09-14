@@ -5,18 +5,20 @@ import (
 	"log"
 )
 
-var commonTemplates = map[string]string{
-	"info": "templates/info/index.html",
+var commonTemplates = map[string][]string{
+	"info":  {"templates/layout_common/index.html", "templates/info/index.html"},
+	"setup": {"templates/layout_common/index.html", "templates/setup/index.html"},
 }
 
-var tmpl *template.Template
+var tmpl map[string]*template.Template
 
 func init() {
-	tmpl = template.New("root")
-	for name, path := range commonTemplates {
-		_, err := tmpl.New(name).ParseFiles(path)
+	tmpl = make(map[string]*template.Template)
+	for name, paths := range commonTemplates {
+		t, err := template.ParseFiles(paths...)
 		if err != nil {
-			log.Fatalf("Failed to parse template %s: %v", path, err)
+			log.Fatalf("Failed to parse template %v: %v", paths, err)
 		}
+		tmpl[name] = t
 	}
 }
