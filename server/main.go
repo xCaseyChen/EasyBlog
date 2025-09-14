@@ -45,7 +45,7 @@ func main() {
 	router.HandleMethodNotAllowed = false
 	router.HandleOPTIONS = false
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
-	common.Routes(router)
+	common.Routes(router, db)
 	guest.Routes(router, db)
 
 	// start server
