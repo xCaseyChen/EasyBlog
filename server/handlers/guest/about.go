@@ -43,7 +43,7 @@ func aboutHandler(db *gorm.DB) httprouter.Handle {
 			HtmlContent: template.HTML(htmlContent),
 		}
 		var htmlString strings.Builder
-		if err = tmpl.ExecuteTemplate(&htmlString, aboutTemplateName, aboutPage); err != nil {
+		if err = tmpl[aboutTemplateName].Execute(&htmlString, aboutPage); err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Failed execute template %s: %v", aboutTemplateName, err)
 			return

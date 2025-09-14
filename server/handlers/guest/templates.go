@@ -6,23 +6,24 @@ import (
 )
 
 // <templates name, template path> map
-var guestTemplates = map[string]string{
-	"setup": "templates/setup/index.html",
-	"post":  "templates/post/index.html",
-	"home":  "templates/home/index.html",
-	"about": "templates/about/index.html",
+var guestTemplates = map[string][]string{
+	"setup": {"templates/setup/index.html"},
+	"post":  {"templates/layout/index.html", "templates/post/index.html"},
+	"home":  {"templates/layout/index.html", "templates/home/index.html"},
+	"about": {"templates/layout/index.html", "templates/about/index.html"},
 }
 
-// root template for html
-var tmpl *template.Template
+// <template name, *template.Template> map
+var tmpl map[string]*template.Template
 
 // init(): templates
 func init() {
-	tmpl = template.New("root")
-	for name, path := range guestTemplates {
-		_, err := tmpl.New(name).ParseFiles(path)
+	tmpl = make(map[string]*template.Template)
+	for name, paths := range guestTemplates {
+		t, err := template.ParseFiles(paths...)
 		if err != nil {
-			log.Fatalf("Failed to parse template %s: %v", path, err)
+			log.Fatalf("Failed to parse template %s: %v", name, err)
 		}
+		tmpl[name] = t
 	}
 }
