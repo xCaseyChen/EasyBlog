@@ -1,7 +1,6 @@
 package guest
 
 import (
-	"errors"
 	"fmt"
 	"html/template"
 	"log"
@@ -20,15 +19,6 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 	homeTemplateName := "home"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").First(r.Context()); err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				http.Redirect(w, r, "/setup", http.StatusFound)
-			} else {
-				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
-				log.Printf("Database error: %v", err)
-			}
-			return
-		}
 		type HomePage struct {
 			HtmlContent template.HTML
 		}
