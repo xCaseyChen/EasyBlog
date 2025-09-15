@@ -13,7 +13,7 @@ import (
 	"easyblog/database"
 )
 
-func setupHandler(db *gorm.DB) httprouter.Handle {
+func setupHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 	setupTemplateName := "setup"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
