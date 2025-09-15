@@ -67,6 +67,10 @@ func (s *ServerConfig) loadConfig() error {
 	if err := viper.UnmarshalKey("server", s); err != nil {
 		return fmt.Errorf("failed to unmarshal server config: %w", err)
 	}
+	if !viper.IsSet("JWT_SECRET") {
+		return fmt.Errorf("required environment not found: JWT_SECRET")
+	}
+	s.JwtSecret = viper.GetString("JWT_SECRET")
 	return nil
 }
 

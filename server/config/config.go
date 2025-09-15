@@ -11,7 +11,8 @@ type Config struct {
 
 // server config
 type ServerConfig struct {
-	Port uint16 `mapstructure:"port"` // server port
+	Port      uint16 `mapstructure:"port"` // server port
+	JwtSecret string
 }
 
 // postgres config
