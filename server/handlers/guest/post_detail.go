@@ -18,7 +18,7 @@ import (
 )
 
 func postDetailHandler(db *gorm.DB) httprouter.Handle {
-	postDetailTemplateName := "post"
+	const postDetailTemplateName = "post"
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		type PostPage struct {

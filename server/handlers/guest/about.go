@@ -15,7 +15,7 @@ import (
 )
 
 func aboutHandler(db *gorm.DB) httprouter.Handle {
-	aboutTemplateName := "about"
+	const aboutTemplateName = "about"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		type AboutPage struct {

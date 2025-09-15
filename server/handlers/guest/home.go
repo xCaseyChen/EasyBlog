@@ -16,7 +16,7 @@ import (
 )
 
 func homeHandler(db *gorm.DB) httprouter.Handle {
-	homeTemplateName := "home"
+	const homeTemplateName = "home"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		type HomePage struct {

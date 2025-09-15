@@ -15,7 +15,7 @@ import (
 )
 
 func postsQueryHandler(db *gorm.DB) httprouter.Handle {
-	limitMax := 20
+	const limitMax = 20
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json") // response type: json
 		// json response
