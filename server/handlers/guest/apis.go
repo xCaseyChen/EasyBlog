@@ -19,11 +19,14 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "application/json") // response type: json
 		// json response
-		type JsonResponse struct {
-			Success      bool                 `json:"success"`
-			Message      string               `json:"message"`
+		type PostQueryData struct {
 			PostBriefs   []database.PostBrief `json:"post_briefs"`
 			NextBeforeID *uint                `json:"next_before_id"`
+		}
+		type JsonResponse struct {
+			Success bool          `json:"success"`
+			Message string        `json:"message"`
+			Data    PostQueryData `json:"data"`
 		}
 		// parse params list
 		tags := utils.ParseQueryList(r, "tags", ",")
@@ -34,10 +37,12 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		if len(category) > 1 || len(limit) > 1 || len(beforeId) > 1 {
 			w.WriteHeader(http.StatusBadRequest)
 			_ = json.NewEncoder(w).Encode(JsonResponse{
-				Success:      false,
-				Message:      "too many category/limit/before_id",
-				PostBriefs:   nil,
-				NextBeforeID: nil,
+				Success: false,
+				Message: "too many category/limit/before_id",
+				Data: PostQueryData{
+					PostBriefs:   nil,
+					NextBeforeID: nil,
+				},
 			})
 			return
 		}
@@ -48,10 +53,12 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 			if err != nil || limitInt <= 0 || limitInt > limitMax {
 				w.WriteHeader(http.StatusBadRequest)
 				_ = json.NewEncoder(w).Encode(JsonResponse{
-					Success:      false,
-					Message:      "invalid limit: " + limit[0],
-					PostBriefs:   nil,
-					NextBeforeID: nil,
+					Success: false,
+					Message: "invalid limit: " + limit[0],
+					Data: PostQueryData{
+						PostBriefs:   nil,
+						NextBeforeID: nil,
+					},
 				})
 				return
 			}
@@ -64,10 +71,12 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 			if err != nil || beforeIdInt <= 0 {
 				w.WriteHeader(http.StatusBadRequest)
 				_ = json.NewEncoder(w).Encode(JsonResponse{
-					Success:      false,
-					Message:      "invalid before_id: " + beforeId[0],
-					PostBriefs:   nil,
-					NextBeforeID: nil,
+					Success: false,
+					Message: "invalid before_id: " + beforeId[0],
+					Data: PostQueryData{
+						PostBriefs:   nil,
+						NextBeforeID: nil,
+					},
 				})
 				return
 			}
@@ -83,10 +92,12 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_ = json.NewEncoder(w).Encode(JsonResponse{
-				Success:      false,
-				Message:      "internal server error",
-				PostBriefs:   nil,
-				NextBeforeID: nil,
+				Success: false,
+				Message: "internal server error",
+				Data: PostQueryData{
+					PostBriefs:   nil,
+					NextBeforeID: nil,
+				},
 			})
 			return
 		}
@@ -96,10 +107,12 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		}
 		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(JsonResponse{
-			Success:      true,
-			Message:      "find post briefs",
-			PostBriefs:   postBriefs,
-			NextBeforeID: nextBeforeID,
+			Success: true,
+			Message: "find post briefs",
+			Data: PostQueryData{
+				PostBriefs:   postBriefs,
+				NextBeforeID: nextBeforeID,
+			},
 		})
 	}
 }
