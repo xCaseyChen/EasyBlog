@@ -153,7 +153,7 @@ func adminLoginHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "auth_token",
 			Value:    tokenString,
-			Path:     "/admin",
+			Path:     "/",
 			HttpOnly: true,  // disable JS read
 			Secure:   false, // ! Local test with HTTP -> HTTPS
 			SameSite: http.SameSiteLaxMode,
