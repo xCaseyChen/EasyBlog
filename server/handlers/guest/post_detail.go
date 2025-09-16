@@ -31,7 +31,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		}
 		// get post_brief by slug
 		slug := ps.ByName("slug")
-		postBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", slug).First(r.Context())
+		postBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", slug).Take(r.Context())
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				common.RenderInfoPage(w, http.StatusNotFound, "page not found")
@@ -43,7 +43,7 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 			}
 		}
 		// get post_detail by id
-		postDetail, err := gorm.G[database.PostDetail](db).Where("id = ?", postBrief.ID).First(r.Context())
+		postDetail, err := gorm.G[database.PostDetail](db).Where("id = ?", postBrief.ID).Take(r.Context())
 		if err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)
