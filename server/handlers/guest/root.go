@@ -16,11 +16,12 @@ func rootHandler(db *gorm.DB) httprouter.Handle {
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").Take(r.Context()); err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				http.Redirect(w, r, "/setup", http.StatusFound)
+				return
 			} else {
 				common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 				log.Printf("Database error: %v", err)
+				return
 			}
-			return
 		}
 		http.Redirect(w, r, "/home", http.StatusFound)
 	}

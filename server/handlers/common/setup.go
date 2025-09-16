@@ -14,7 +14,7 @@ import (
 )
 
 func setupHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
-	setupTemplateName := "setup"
+	const setupTemplateName = "setup"
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if _, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").Take(r.Context()); err != nil {

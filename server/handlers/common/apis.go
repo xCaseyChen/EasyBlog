@@ -20,12 +20,12 @@ func setupPasswordHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)     // limit body to 1 MB
 		w.Header().Set("Content-Type", "application/json") // response type: json
 		// json request and response
+		type JsonRequest struct {
+			Password string `json:"password"`
+		}
 		type JsonResponse struct {
 			Success bool   `json:"success"`
 			Message string `json:"message"`
-		}
-		type JsonRequest struct {
-			Password string `json:"password"`
 		}
 		// get password
 		var jsonRequest JsonRequest
@@ -100,11 +100,11 @@ func adminLoginHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 		r.Body = http.MaxBytesReader(w, r.Body, 1<<20)     // limit body to 1 MB
 		w.Header().Set("Content-Type", "application/json") // response type: json
 		type JsonRequest struct {
-			Password string
+			Password string `json:"password"`
 		}
 		type JsonResponse struct {
-			Success bool
-			Message string
+			Success bool   `json:"success"`
+			Message string `json:"message"`
 		}
 
 		var jsonRequest JsonRequest
@@ -149,7 +149,7 @@ func adminLoginHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 			log.Printf("Failed to sign JWT: %v", err)
 			return
 		}
-		w.WriteHeader(http.StatusOK)
+
 		http.SetCookie(w, &http.Cookie{
 			Name:     "auth_token",
 			Value:    tokenString,
@@ -159,6 +159,7 @@ func adminLoginHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 			SameSite: http.SameSiteLaxMode,
 			MaxAge:   int(expire.Seconds()),
 		})
+		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(JsonResponse{
 			Success: true,
 			Message: "login success",

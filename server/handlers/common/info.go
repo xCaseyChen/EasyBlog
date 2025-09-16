@@ -8,7 +8,7 @@ import (
 )
 
 func RenderInfoPage(w http.ResponseWriter, code int, message string) {
-	infoTemplateName := "info"
+	const infoTemplateName = "info"
 	type Info struct {
 		Code    int
 		Title   string
@@ -19,6 +19,7 @@ func RenderInfoPage(w http.ResponseWriter, code int, message string) {
 			{http.StatusInternalServerError, text{Code},"internal server error"}
 			{http.StatusNotFound, text{Code}, "page not found"}
 			{http.StatusMethodNotAllowed, text{Code}, "method not allowed"}
+			{http.StatusUnauthorized, text{Code}, "access denied"}
 	*/
 
 	info := Info{
