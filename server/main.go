@@ -6,6 +6,7 @@ import (
 
 	"easyblog/config"
 	"easyblog/database"
+	"easyblog/handlers/admin"
 	"easyblog/handlers/common"
 	"easyblog/handlers/guest"
 
@@ -45,8 +46,9 @@ func main() {
 	router.HandleMethodNotAllowed = false
 	router.HandleOPTIONS = false
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
-	common.Routes(router, db)
+	common.Routes(router, db, cfg.ServerCfg.JwtSecret)
 	guest.Routes(router, db)
+	admin.Routes(router, db, cfg.ServerCfg.JwtSecret)
 
 	// start server
 	addr := fmt.Sprintf(":%d", cfg.ServerCfg.Port)
