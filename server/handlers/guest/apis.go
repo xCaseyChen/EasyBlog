@@ -4,6 +4,7 @@ import (
 	"easyblog/database"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -99,6 +100,7 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 					NextBeforeID: nil,
 				},
 			})
+			log.Printf("Database error: %v", err)
 			return
 		}
 		var nextBeforeID *uint = nil
@@ -121,5 +123,74 @@ func commentsQueryHandler(db *gorm.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		tags := r.URL.Query()["tags"]
 		fmt.Fprintf(w, "Comments query: tags:%v\n", tags)
+	}
+}
+
+func allTagsQueryHandler(db *gorm.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		w.Header().Set("Content-Type", "application/json")
+
+		type AllTagsData struct {
+			Tags pq.StringArray `gorm:"column:all_tags;type:text[]" json:"tags"`
+		}
+		type JsonResponse struct {
+			Success bool         `json:"success"`
+			Message string       `json:"message"`
+			Data    *AllTagsData `json:"data"`
+		}
+
+		var allTagsData AllTagsData
+		subQuery := db.Model(&database.PostBrief{}).Select("unnest(tags) AS tag")
+		if err := db.Table("(?) as t", subQuery).Select("array_agg(DISTINCT tag ORDER BY tag) AS all_tags").Scan(&allTagsData).Error; err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			_ = json.NewEncoder(w).Encode(JsonResponse{
+				Success: false,
+				Message: "internal server error",
+				Data:    nil,
+			})
+			log.Printf("Database error: %v", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(JsonResponse{
+			Success: true,
+			Message: "find all tags",
+			Data:    &allTagsData,
+		})
+	}
+}
+
+func allCategoriesQueryHandler(db *gorm.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		w.Header().Set("Content-Type", "application/json")
+
+		type AllCategoriesData struct {
+			Categories pq.StringArray `gorm:"column:all_categories;type:text[]" json:"categories"`
+		}
+		type JsonResponse struct {
+			Success bool               `json:"success"`
+			Message string             `json:"message"`
+			Data    *AllCategoriesData `json:"data"`
+		}
+
+		var allCategoriesData AllCategoriesData
+		if err := db.Model(&database.PostBrief{}).Where("category IS NOT NULL").Select("array_agg(DISTINCT category ORDER BY category) AS all_categories").Scan(&allCategoriesData).Error; err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			_ = json.NewEncoder(w).Encode(JsonResponse{
+				Success: false,
+				Message: "internal server error",
+				Data:    nil,
+			})
+			log.Printf("Database error: %v", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(JsonResponse{
+			Success: true,
+			Message: "find all categories",
+			Data:    &allCategoriesData,
+		})
 	}
 }
