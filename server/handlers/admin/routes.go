@@ -11,6 +11,7 @@ import (
 
 var adminGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/admin/dashboard": dashboardHandler, // admin dashboard page
+	"/api/admin/ping":  pingHandler,      // admin ping api
 }
 
 var adminPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{}
