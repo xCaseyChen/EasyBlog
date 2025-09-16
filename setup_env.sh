@@ -16,6 +16,7 @@ PGADMIN_PORT=8080
 
 # Server configurations
 SERVER_PORT=80
+JWT_SECRET=$(openssl rand -hex 32)
 
 #####################################
 
@@ -32,16 +33,16 @@ function check_port_availability() {
 # check ports availability
 check_port_availability ${POSTGRES_PORT}
 check_port_availability ${PGADMIN_PORT}
-check_port_availability ${SERVER_PORT_EXTERNAL}
+check_port_availability ${SERVER_PORT}
 
 # Generate the .env configuration file
-if test -e ".env"
+if test -e ".env.example"
 then
     echo ".env is already exists"
     exit 1
 fi
 
-cat > .env <<EOF
+cat > .env.example <<EOF
 # PostgreSQL username
 POSTGRES_USER=${POSTGRES_USER}
 
@@ -71,6 +72,9 @@ PGADMIN_PORT=${PGADMIN_PORT}
 
 # Server host port (used for host access to the server)
 SERVER_PORT=${SERVER_PORT}
+
+# Server JWT secret
+JWT_SECRET=${JWT_SECRET}
 EOF
 
 echo "Successfully generated .env"
