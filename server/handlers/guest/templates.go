@@ -10,6 +10,7 @@ var guestTemplates = map[string][]string{
 	"post":  {"templates/layout_guest/index.html", "templates/post/index.html"},
 	"home":  {"templates/layout_guest/index.html", "templates/home/index.html"},
 	"about": {"templates/layout_guest/index.html", "templates/about/index.html"},
+	"list":  {"templates/layout_guest/index.html", "templates/list/index.html"},
 }
 
 // <template name, *template.Template> map
