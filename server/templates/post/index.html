@@ -1,0 +1,38 @@
+<!-- Post Template {Title, CreatedAt, UpdatedAt, Category, Tags, HtmlContent} -->
+
+{{- define "title" -}}{{ .Title }}{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css">
+<link rel="stylesheet" href="/static/css/post/post.css">
+{{- end -}}
+
+{{- define "content" -}}
+<article>
+  <h1>{{ .Title }}</h1>
+  <div class="meta">
+    <div><time class="created" datetime="{{ .CreatedAt }}"></time></div>
+    <div><time class="updated" datetime="{{ .UpdatedAt }}"></time></div>
+    <div class="category">
+      Category:
+      <a href="/categories?category={{ .Category }}">
+        {{ .Category }}
+      </a>
+    </div>
+    <div class="tags">Tags:
+      {{ range .Tags }}
+      <a class="tag" href="/tags?tag={{ . }}">#{{ . }}</a>
+      {{ end }}
+    </div>
+  </div>
+  <div class="content markdown-body">
+    {{ .HtmlContent }}
+  </div>
+</article>
+{{- end -}}
+
+{{- define "extra_js" -}}
+<script src="/static/js/post/post.js"></script>
+{{- end -}}
+
+{{- template "layout" . -}}

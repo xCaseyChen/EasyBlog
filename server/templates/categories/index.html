@@ -1,0 +1,19 @@
+<!-- Categories Template {} -->
+
+{{- define "title" -}}Categories{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="/static/css/categories/categories.css">
+{{- end -}}
+
+{{- define "content" -}}
+<section id="categories-container"></section>
+<section id="post-list"></section>
+<div id="load-more" class="load-more"></div>
+{{- end -}}
+
+{{- define "extra_js" -}}
+<script src="/static/js/categories/categories.js"></script>
+{{- end -}}
+
+{{- template "layout" . -}}

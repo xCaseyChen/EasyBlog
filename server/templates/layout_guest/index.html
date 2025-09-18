@@ -1,0 +1,62 @@
+{{- define "layout" -}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ block "title" . }}Unknown{{ end }} - Easy Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/layout_guest/layout_guest.css">
+  {{ block "extra_css" . }}{{ end }}
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/list">Posts</a>
+      <a href="/tags">Tags</a>
+      <a href="/categories">Categories</a>
+      <a href="/about">About</a>
+      <button id="loginBtn">Login</button>
+    </nav>
+  </header>
+
+  <main>
+    {{ block "content" . }}{{ end }}
+  </main>
+
+  <footer>
+    <p>copyright 2025 Casey Chen, Powered by <a href="https://github.com/xCaseyChen/EasyBlog" target="_blank"
+        rel="noopener noreferrer">EasyBlog</a></p>
+  </footer>
+
+  <dialog id="loginDialog">
+    <form id="loginForm">
+      <h2>Admin Login</h2>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <div id="loginMessage"></div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">Login</button>
+        <button type="button" class="btn-cancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="resultDialog">
+    <p id="resultMessage"></p>
+    <div class="form-actions">
+      <button id="resultOkBtn" class="btn-ok">OK</button>
+    </div>
+  </dialog>
+
+  <script src="/static/js/layout_guest/layout_guest.js"></script>
+  {{ block "extra_js" . }}{{ end }}
+</body>
+
+</html>
+{{- end -}}

@@ -1,3 +1,20 @@
+const msgDialog = document.getElementById("msgDialog");
+const msgContent = document.getElementById("msgContent");
+const msgOk = document.getElementById("msgOk");
+
+function showMessage(message, callback) {
+    msgContent.textContent = message;
+    msgDialog.showModal();
+
+    function handleOk() {
+        msgDialog.close();
+        msgOk.removeEventListener("click", handleOk);
+        if (callback) callback();
+    }
+
+    msgOk.addEventListener("click", handleOk);
+}
+
 document.getElementById("submitBtn").addEventListener("click", async () => {
     const password = document.getElementById("password").value;
 
@@ -12,13 +29,14 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
         const data = await response.json();
         if (response.ok && data.success) {
-            alert(data.message);
-            window.location.href = "/home";
+            showMessage(data.message, () => {
+                window.location.href = "/home";
+            });
         } else {
-            alert(data.message || "Request failed");
+            showMessage(data.message || "Request failed");
         }
     } catch (err) {
-        alert("Network error");
+        showMessage("Network error");
         console.error(err);
     }
 });
