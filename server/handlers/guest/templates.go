@@ -7,10 +7,11 @@ import (
 
 // <templates name, template path> map
 var guestTemplates = map[string][]string{
-	"post":  {"templates/layout_guest/index.html", "templates/post/index.html"},
-	"home":  {"templates/layout_guest/index.html", "templates/home/index.html"},
-	"about": {"templates/layout_guest/index.html", "templates/about/index.html"},
-	"list":  {"templates/layout_guest/index.html", "templates/list/index.html"},
+	"post":       {"templates/layout_guest/index.html", "templates/post/index.html"},
+	"home":       {"templates/layout_guest/index.html", "templates/home/index.html"},
+	"about":      {"templates/layout_guest/index.html", "templates/about/index.html"},
+	"list":       {"templates/layout_guest/index.html", "templates/list/index.html"},
+	"categories": {"templates/layout_guest/index.html", "templates/categories/index.html"},
 }
 
 // <template name, *template.Template> map
