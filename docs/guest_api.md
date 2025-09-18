@@ -25,3 +25,29 @@ BODY
     }
 }
 ```
+
+```javascript
+GET /api/guest/tags
+
+
+{
+    "success": true,
+    "message": "xxx",
+    "data": {
+        "tags": ["iii", "jjj"]
+    }
+}
+```
+
+```javascript
+GET /api/guest/categories
+
+
+{
+    "success": true,
+    "message": "xxx",
+    "data": {
+        "categories": ["iii", "jjj"]
+    }
+}
+```
