@@ -1,0 +1,18 @@
+<!-- ListTemplate {} -->
+
+{{- define "title" -}}Posts{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="/static/css/list/list.css">
+{{- end -}}
+
+{{- define "content" -}}
+<section id="post-list"></section>
+<div id="load-more" class="load-more">Loading...</div>
+{{- end -}}
+
+{{- define "extra_js" -}}
+<script src="/static/js/list/list.js"></script>
+{{- end -}}
+
+{{- template "layout" . -}}

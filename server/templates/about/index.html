@@ -1,0 +1,20 @@
+<!-- About Template {HtmlContent} -->
+
+{{- define "title" -}}About{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css">
+<link rel="stylesheet" href="/static/css/about/about.css">
+{{- end -}}
+
+{{- define "content" -}}
+<article>
+  <div class="content markdown-body">
+    {{ .HtmlContent }}
+  </div>
+</article>
+{{- end -}}
+
+{{- define "extra_js" -}}{{- end -}}
+
+{{- template "layout" . -}}

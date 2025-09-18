@@ -1,0 +1,17 @@
+<!-- Info Template {Code, Title, Message} -->
+
+{{- define "title" -}}{{.Title}}{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="/static/css/info/info.css">
+{{- end -}}
+
+{{- define "content" -}}
+<h1>{{ .Code }}</h1>
+<p class="info-message">{{ .Message }}</p>
+<a href="/" class="info-link">Back to Home</a>
+{{- end -}}
+
+{{- define "extra_js" -}}{{- end -}}
+
+{{- template "layout" . -}}

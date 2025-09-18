@@ -1,0 +1,11 @@
+# Development-related files
+TODO.md
+
+# Environment configuration file
+.env
+
+# Log files
+.log
+
+# Vscode config
+.vscode/

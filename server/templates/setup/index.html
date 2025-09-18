@@ -1,0 +1,33 @@
+<!-- Setup Template {} -->
+
+{{- define "title" -}}Setup{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="/static/css/setup/setup.css">
+{{- end -}}
+
+{{- define "content" -}}
+<section class="setup-form-section">
+  <form id="setupForm" class="setup-form">
+    <div class="form-group">
+      <label for="password" class="form-label">Admin Password:</label>
+      <input type="password" id="password" name="password" class="form-input" required />
+    </div>
+
+    <div class="form-actions">
+      <button type="button" id="submitBtn" class="btn-primary">Set Password</button>
+    </div>
+  </form>
+</section>
+
+<dialog id="msgDialog">
+  <p id="msgContent"></p>
+  <button id="msgOk">OK</button>
+</dialog>
+{{- end -}}
+
+{{- define "extra_js" -}}
+<script src="/static/js/setup/setup.js"></script>
+{{- end -}}
+
+{{- template "layout" . -}}

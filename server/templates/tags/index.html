@@ -1,0 +1,19 @@
+<!-- Tags Template {} -->
+
+{{- define "title" -}}Tags{{- end -}}
+
+{{- define "extra_css" -}}
+<link rel="stylesheet" href="/static/css/tags/tags.css">
+{{- end -}}
+
+{{- define "content" -}}
+<section id="tags-container"></section>
+<section id="post-list"></section>
+<div id="load-more" class="load-more"></div>
+{{- end -}}
+
+{{- define "extra_js" -}}
+<script src="/static/js/tags/tags.js"></script>
+{{- end -}}
+
+{{- template "layout" . -}}
