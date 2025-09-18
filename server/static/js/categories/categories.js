@@ -149,6 +149,7 @@ async function fetchPostsByCurCategory() {
     } catch (err) {
         console.error(err);
         loadMore.textContent = `Error: ${err.message}`;
+        finished = true;
     } finally {
         loading = false;
     }
