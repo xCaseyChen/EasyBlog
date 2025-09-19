@@ -14,7 +14,9 @@ var adminGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/api/admin/ping":  pingHandler,      // admin ping api
 }
 
-var adminPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{}
+var adminPostHandlers = map[string]func(*gorm.DB) httprouter.Handle{
+	"/api/admin/logout": logoutHandler, // admin logout api
+}
 
 func withAuth(h httprouter.Handle, jwtSecret string) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
