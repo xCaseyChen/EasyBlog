@@ -31,7 +31,7 @@ loginBtn.addEventListener("click", async () => {
             loginForm.password.value = "";
             loginDialog.showModal();
         } else {
-            showResult("Failed to access dashboard", false);
+            showResult("Login failed", false);
         }
     } catch (err) {
         console.error(err);
@@ -68,7 +68,7 @@ loginSubmitBtn.addEventListener("click", async (e) => {
 
         if (response.ok && data.success) {
             loginDialog.close();
-            showResult("Login successful!", true);
+            showResult("Login success", true);
         } else {
             showResult(data.message || "Login failed", false);
         }
