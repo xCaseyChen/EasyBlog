@@ -141,7 +141,7 @@ func allTagsQueryHandler(db *gorm.DB) httprouter.Handle {
 		}
 
 		var allTagsData AllTagsData
-		subQuery := db.Model(&database.PostBrief{}).Select("unnest(tags) AS tag")
+		subQuery := db.Model(&database.PostBrief{}).Where("status = ?", "published").Select("unnest(tags) AS tag")
 		if err := db.Table("(?) as t", subQuery).Select("array_agg(DISTINCT tag ORDER BY tag) AS all_tags").Scan(&allTagsData).Error; err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_ = json.NewEncoder(w).Encode(JsonResponse{
@@ -176,7 +176,7 @@ func allCategoriesQueryHandler(db *gorm.DB) httprouter.Handle {
 		}
 
 		var allCategoriesData AllCategoriesData
-		if err := db.Model(&database.PostBrief{}).Where("category IS NOT NULL").Select("array_agg(DISTINCT category ORDER BY category) AS all_categories").Scan(&allCategoriesData).Error; err != nil {
+		if err := db.Model(&database.PostBrief{}).Where("category IS NOT NULL").Where("status = ?", "published").Select("array_agg(DISTINCT category ORDER BY category) AS all_categories").Scan(&allCategoriesData).Error; err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_ = json.NewEncoder(w).Encode(JsonResponse{
 				Success: false,
