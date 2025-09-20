@@ -13,7 +13,7 @@ var guestGetHandlers = map[string]func(*gorm.DB) httprouter.Handle{
 	"/categories":           categoriesHandler,         // categories page
 	"/tags":                 tagsHandler,               // tags page
 	"/about":                aboutHandler,              // about page
-	"/post/:slug":           postDetailHandler,         // post detail page by slug
+	"/posts/:slug":          postDetailHandler,         // post detail page by slug
 	"/api/guest/posts":      postsQueryHandler,         // query posts api
 	"/api/guest/comments":   commentsQueryHandler,      // query comments api
 	"/api/guest/tags":       allTagsQueryHandler,       // query all tags

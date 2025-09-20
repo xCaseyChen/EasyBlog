@@ -129,7 +129,7 @@ async function fetchPostsByCurCategory() {
 
             return `
                     <article class="post-item">
-                        <h2><a href="/post/${encodeURIComponent(post.slug)}">${post.title}</a></h2>
+                        <h2><a href="/posts/${encodeURIComponent(post.slug)}">${post.title}</a></h2>
                         <div class="meta">
                             ${category}
                             ${tags}
