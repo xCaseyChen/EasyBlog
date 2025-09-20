@@ -10,7 +10,11 @@ CREATE TABLE IF NOT EXISTS post_briefs (
     pinned      BOOLEAN DEFAULT FALSE,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CHECK (status IN ('draft', 'published', 'deleted', 'hidden'))
+    CHECK (status IN ('draft', 'published', 'deleted', 'hidden')),
+    CHECK (
+        slug IN ('home', 'about') AND status = 'hidden' OR
+        slug NOT IN ('home', 'about')
+    )
 );
 
 CREATE TABLE IF NOT EXISTS post_details (
