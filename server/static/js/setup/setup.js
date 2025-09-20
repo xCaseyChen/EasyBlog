@@ -1,3 +1,6 @@
+const submitBtn = document.getElementById("submitBtn");
+const passwordInput = document.getElementById("password");
+
 const msgDialog = document.getElementById("msgDialog");
 const msgContent = document.getElementById("msgContent");
 const msgOk = document.getElementById("msgOk");
@@ -15,9 +18,14 @@ function showMessage(message, callback) {
     msgOk.addEventListener("click", handleOk);
 }
 
-document.getElementById("submitBtn").addEventListener("click", async () => {
-    const password = document.getElementById("password").value;
+submitBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
 
+    const password = passwordInput.value;
+    if (!password) {
+        showMessage("Password cannot be empty");
+        return;
+    }
     try {
         const response = await fetch("/api/setup/password", {
             method: "POST",
