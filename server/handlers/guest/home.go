@@ -22,13 +22,17 @@ func homeHandler(db *gorm.DB) httprouter.Handle {
 		type HomePage struct {
 			HtmlContent template.HTML
 		}
-		homeBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", "home").Take(r.Context())
+		homeBrief, err := gorm.G[database.PostBrief](db).
+			Where("slug = ?", "home").
+			Take(r.Context())
 		if err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)
 			return
 		}
-		homeDetail, err := gorm.G[database.PostDetail](db).Where("id = ?", homeBrief.ID).Take(r.Context())
+		homeDetail, err := gorm.G[database.PostDetail](db).
+			Where("id = ?", homeBrief.ID).
+			Take(r.Context())
 		if err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)

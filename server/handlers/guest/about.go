@@ -21,13 +21,17 @@ func aboutHandler(db *gorm.DB) httprouter.Handle {
 		type AboutPage struct {
 			HtmlContent template.HTML
 		}
-		aboutBrief, err := gorm.G[database.PostBrief](db).Where("slug = ?", "about").Take(r.Context())
+		aboutBrief, err := gorm.G[database.PostBrief](db).
+			Where("slug = ?", "about").
+			Take(r.Context())
 		if err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)
 			return
 		}
-		aboutDetail, err := gorm.G[database.PostDetail](db).Where("id = ?", aboutBrief.ID).Take(r.Context())
+		aboutDetail, err := gorm.G[database.PostDetail](db).
+			Where("id = ?", aboutBrief.ID).
+			Take(r.Context())
 		if err != nil {
 			common.RenderInfoPage(w, http.StatusInternalServerError, "internal server error")
 			log.Printf("Database error: %v", err)

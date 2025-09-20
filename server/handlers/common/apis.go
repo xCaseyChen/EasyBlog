@@ -117,7 +117,9 @@ func adminLoginHandler(db *gorm.DB, jwtSecret string) httprouter.Handle {
 			return
 		}
 
-		localUser, err := gorm.G[database.LocalUser](db).Where("username = ?", "admin").Take(r.Context())
+		localUser, err := gorm.G[database.LocalUser](db).
+			Where("username = ?", "admin").
+			Take(r.Context())
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			_ = json.NewEncoder(w).Encode(JsonResponse{
