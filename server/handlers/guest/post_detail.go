@@ -23,10 +23,10 @@ func postDetailHandler(db *gorm.DB) httprouter.Handle {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		type PostPage struct {
 			Title       string
-			CreatedAt   string
-			UpdatedAt   string
 			Category    string
 			Tags        []string
+			CreatedAt   string
+			UpdatedAt   string
 			HtmlContent template.HTML
 		}
 		// get post_brief by slug

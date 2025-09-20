@@ -4,20 +4,24 @@ CREATE TABLE IF NOT EXISTS post_briefs (
     id          SERIAL PRIMARY KEY,
     title       TEXT NOT NULL,
     slug        TEXT UNIQUE,
+    category    TEXT,
+    tags        TEXT[],
+    status      TEXT NOT NULL,
+    pinned      BOOLEAN DEFAULT FALSE,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    category    TEXT,
-    tags        TEXT[]
+    CHECK (status IN ('draft', 'published', 'deleted', 'hidden'))
 );
 
 CREATE TABLE IF NOT EXISTS post_details (
     id          INTEGER REFERENCES post_briefs(id) ON DELETE CASCADE,
-    content     TEXT
+    content     TEXT,
+    CONSTRAINT unique_post_id UNIQUE (id)
 );
 
 WITH ins AS (
-    INSERT INTO post_briefs (title, slug)
-    VALUES ('Home', 'home'), ('About', 'about')
+    INSERT INTO post_briefs (title, slug, status)
+    VALUES ('Home', 'home', 'hidden'), ('About', 'about', 'hidden')
     ON CONFLICT (slug) DO NOTHING
     RETURNING id
 )

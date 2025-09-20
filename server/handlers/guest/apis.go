@@ -48,25 +48,7 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 			return
 		}
 		// use tags, category, before_id, limit search in database
-		query := gorm.G[database.PostBrief](db).Order("id desc")
-		if len(limit) == 1 {
-			limitInt, err := strconv.Atoi(limit[0])
-			if err != nil || limitInt <= 0 || limitInt > limitMax {
-				w.WriteHeader(http.StatusBadRequest)
-				_ = json.NewEncoder(w).Encode(JsonResponse{
-					Success: false,
-					Message: "invalid limit: " + limit[0],
-					Data: PostQueryData{
-						PostBriefs:   nil,
-						NextBeforeID: nil,
-					},
-				})
-				return
-			}
-			query = query.Limit(limitInt)
-		} else {
-			query = query.Limit(limitMax)
-		}
+		query := gorm.G[database.PostBrief](db).Where("status = ? ", "published")
 		if len(beforeId) == 1 {
 			beforeIdInt, err := strconv.Atoi(beforeId[0])
 			if err != nil || beforeIdInt <= 0 {
@@ -88,6 +70,25 @@ func postsQueryHandler(db *gorm.DB) httprouter.Handle {
 		}
 		if len(category) == 1 {
 			query = query.Where("category = ?", category[0])
+		}
+		query = query.Order("pinned DESC, id DESC")
+		if len(limit) == 1 {
+			limitInt, err := strconv.Atoi(limit[0])
+			if err != nil || limitInt <= 0 || limitInt > limitMax {
+				w.WriteHeader(http.StatusBadRequest)
+				_ = json.NewEncoder(w).Encode(JsonResponse{
+					Success: false,
+					Message: "invalid limit: " + limit[0],
+					Data: PostQueryData{
+						PostBriefs:   nil,
+						NextBeforeID: nil,
+					},
+				})
+				return
+			}
+			query = query.Limit(limitInt)
+		} else {
+			query = query.Limit(limitMax)
 		}
 		postBriefs, err := query.Find(r.Context())
 		if err != nil {

@@ -10,10 +10,12 @@ type PostBrief struct {
 	ID        uint           `json:"id"`
 	Title     string         `json:"title"`
 	Slug      string         `json:"slug"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
 	Category  string         `json:"category"`
 	Tags      pq.StringArray `gorm:"type:text[]" json:"tags"`
+	Status    string         `json:"status"`
+	Pinned    bool           `json:"pinned"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
 }
 
 type PostDetail struct {
