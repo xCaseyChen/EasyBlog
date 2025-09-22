@@ -7,6 +7,7 @@ import (
 
 var adminTemplates = map[string][]string{
 	"dashboard": {"templates/layout_admin/index.html", "templates/dashboard/index.html"},
+	"preview":   {"templates/layout_preview/index.html", "templates/post/index.html"},
 }
 
 var tmpl map[string]*template.Template
