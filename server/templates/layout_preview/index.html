@@ -1,0 +1,38 @@
+{{- define "layout" -}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ block "title" . }}Unknown{{ end }} - Easy Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/layout_guest/layout_guest.css">
+  {{ block "extra_css" . }}{{ end }}
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/list">Posts</a>
+      <a href="/categories">Categories</a>
+      <a href="/tags">Tags</a>
+      <a href="/about">About</a>
+      <button id="loginBtn">Login</button>
+    </nav>
+  </header>
+
+  <main>
+    {{ block "content" . }}{{ end }}
+  </main>
+
+  <footer>
+    <p>copyright 2025 Casey Chen, Powered by <a href="https://github.com/xCaseyChen/EasyBlog" target="_blank"
+        rel="noopener noreferrer">EasyBlog</a></p>
+  </footer>
+
+  {{ block "extra_js" . }}{{ end }}
+</body>
+
+</html>
+{{- end -}}
