@@ -20,6 +20,7 @@ func RenderInfoPage(w http.ResponseWriter, code int, message string) {
 			{http.StatusNotFound, text{Code}, "page not found"}
 			{http.StatusMethodNotAllowed, text{Code}, "method not allowed"}
 			{http.StatusUnauthorized, text{Code}, "access denied"}
+			{http.StatusBadRequest, text{Code}, "bad request"}
 	*/
 
 	info := Info{
